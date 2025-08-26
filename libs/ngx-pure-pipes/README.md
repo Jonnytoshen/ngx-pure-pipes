@@ -4,7 +4,7 @@ A comprehensive collection of pure, standalone Angular pipes that bring operator
 
 [![npm version](https://badge.fury.io/js/ngx-pure-pipes.svg)](https://badge.fury.io/js/ngx-pure-pipes)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Angular](https://img.shields.io/badge/Angular-20%2B-red.svg)](https://angular.io)
+[![Angular](https://img.shields.io/badge/Angular-20%2B-red.svg)](https://angular.dev)
 
 ## ✨ Features
 
@@ -37,24 +37,22 @@ import { EqPipe, AndPipe, IsNilPipe, MapPipe } from 'ngx-pure-pipes';
   template: `
     <!-- Boolean logic -->
     @if ([user.isActive, user.isVerified] | and) {
-      <span class="badge success">Verified User</span>
+    <span class="badge success">Verified User</span>
     }
-    
+
     <!-- Comparisons -->
-    <div [class.highlight]="status | eq:'premium'">
-      Premium Feature
-    </div>
-    
+    <div [class.highlight]="status | eq : 'premium'">Premium Feature</div>
+
     <!-- Null checking -->
     @if (user.avatar | isNil) {
-      <img src="/default-avatar.png" alt="Default Avatar">
+    <img src="/default-avatar.png" alt="Default Avatar" />
     }
-    
+
     <!-- Array transformations -->
     @for (item of items | map:'name'; track item) {
-      <li>{{ item }}</li>
+    <li>{{ item }}</li>
     }
-  `
+  `,
 })
 export class ExampleComponent {
   user = { isActive: true, isVerified: true, avatar: null };
@@ -76,12 +74,12 @@ export class ExampleComponent {
     @if (user.age | gte:18) {
       <adult-content></adult-content>
     }
-    
+
     <!-- List rendering with transformations -->
     @for (item of items | filter:'active':true | sortBy:'name'; track item.id) {
       <item-card [data]="item"></item-card>
     }
-    
+
     <!-- Switch statements -->
     @switch (user.role | lowerCase) {
       @case ('admin') { <admin-panel></admin-panel> }
@@ -98,11 +96,11 @@ export class ExampleComponent {
 @Component({
   template: `
     <form [formGroup]="form">
-      <input 
+      <input
         formControlName="email"
         [class.invalid]="form.get('email')?.errors | isTruthy"
       >
-      
+
       @if (form.get('email')?.value | match:'@company.com') {
         <span class="corporate-badge">Corporate Account</span>
       }
@@ -118,10 +116,10 @@ export class ExampleComponent {
   template: `
     <!-- Complex data transformations -->
     @for (
-      item of users 
-        | filter:'active':true 
-        | sortBy:'lastLogin' 
-        | take:10 
+      item of users
+        | filter:'active':true
+        | sortBy:'lastLogin'
+        | take:10
         | map:'displayName';
       track item
     ) {
@@ -158,7 +156,7 @@ For detailed API documentation with examples, visit our [documentation site](lin
 
 ## 🤝 Contributing
 
-We welcome contributions! Please see our [Contributing Guidelines](CONTRIBUTING.md) for details.
+We welcome contributions! Please see our [Contributing Guidelines](https://github.com/Jonnytoshen/ngx-pure-pipes/blob/main/CONTRIBUTING.md) for details.
 
 ### Development Guidelines
 
@@ -177,14 +175,14 @@ We welcome contributions! Please see our [Contributing Guidelines](CONTRIBUTING.
 ## 🗺️ Roadmap
 
 - **v0.1**: Core boolean and comparison pipes
-- **v0.2**: Array and string manipulation pipes  
+- **v0.2**: Array and string manipulation pipes
 - **v0.3**: Mathematical and aggregate operations
 - **v0.4**: Object manipulation utilities
 - **v1.0**: Stable API with full documentation
 
 ## 📄 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License - see the [LICENSE](https://github.com/Jonnytoshen/ngx-pure-pipes/blob/main/LICENSE) file for details.
 
 ## 🙏 Acknowledgments
 
