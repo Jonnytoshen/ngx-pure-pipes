@@ -64,8 +64,21 @@
     }
   },
   "release": {
+    "releaseTagPattern": "v{version}",
+    "git": {
+      "commitMessage": "chore(release): release v{version}",
+      "commit": true,
+      "tag": true,
+      "push": false
+    },
+    "changelog": {
+      "workspaceChangelog": {
+        "createRelease": "github"
+      }
+    },
     "version": {
-      "preVersionCommand": "yarn nx run-many -t build"
+      "preVersionCommand": "yarn nx run-many -t build",
+      "conventionalCommits": true
     }
   }
 }
