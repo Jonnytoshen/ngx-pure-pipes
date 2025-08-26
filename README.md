@@ -1,101 +1,197 @@
-# NgxPurePipes
+# ngx-pure-pipes
 
-<a alt="Nx logo" href="https://nx.dev" target="_blank" rel="noreferrer"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="45"></a>
+A comprehensive collection of pure, standalone Angular pipes that bring operator-style functionality to your templates. Transform your template expressions into readable, testable, and reusable code while maintaining optimal performance and type safety.
 
-✨ Your new, shiny [Nx workspace](https://nx.dev) is ready ✨.
+[![npm version](https://badge.fury.io/js/ngx-pure-pipes.svg)](https://badge.fury.io/js/ngx-pure-pipes)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Angular](https://img.shields.io/badge/Angular-20%2B-red.svg)](https://angular.io)
 
-[Learn more about this workspace setup and its capabilities](https://nx.dev/getting-started/tutorials/angular-monorepo-tutorial?utm_source=nx_project&amp;utm_medium=readme&amp;utm_campaign=nx_projects) or run `npx nx graph` to visually explore what was created. Now, let's get you up to speed!
+## ✨ Features
 
-## Run tasks
+- **Pure Pipes**: Zero side effects with optimal change detection performance
+- **Tree-shakeable**: Import only what you need for minimal bundle size
+- **Standalone**: Modern Angular architecture with no NgModule dependencies
+- **Type-safe**: Full TypeScript support with strict typing
+- **Operator-style**: Intuitive naming that mirrors functional programming concepts
+- **Template-friendly**: Perfect companion for Angular's native control flow (`@if`, `@for`, `@switch`)
 
-To run the dev server for your app, use:
+## 📦 Installation
 
-```sh
-npx nx serve docs
+```bash
+npm install ngx-pure-pipes
+# or
+yarn add ngx-pure-pipes
+# or
+pnpm add ngx-pure-pipes
 ```
 
-To create a production bundle:
+## 🚀 Quick Start
 
-```sh
-npx nx build docs
+```typescript
+import { Component } from '@angular/core';
+import { EqPipe, AndPipe, IsNilPipe, MapPipe } from 'ngx-pure-pipes';
+
+@Component({
+  selector: 'app-example',
+  imports: [EqPipe, AndPipe, IsNilPipe, MapPipe],
+  template: `
+    <!-- Boolean logic -->
+    @if ([user.isActive, user.isVerified] | and) {
+      <span class="badge success">Verified User</span>
+    }
+    
+    <!-- Comparisons -->
+    <div [class.highlight]="status | eq:'premium'">
+      Premium Feature
+    </div>
+    
+    <!-- Null checking -->
+    @if (user.avatar | isNil) {
+      <img src="/default-avatar.png" alt="Default Avatar">
+    }
+    
+    <!-- Array transformations -->
+    @for (item of items | map:'name'; track item) {
+      <li>{{ item }}</li>
+    }
+  `
+})
+export class ExampleComponent {
+  user = { isActive: true, isVerified: true, avatar: null };
+  status = 'premium';
+  items = [{ name: 'Apple' }, { name: 'Banana' }];
+}
 ```
 
-To see all available targets to run for a project, run:
+## 📚 Pipe Categories
 
-```sh
-npx nx show project docs
+## 🎯 Usage Patterns
+
+### With Angular Control Flow
+
+```typescript
+@Component({
+  template: `
+    <!-- Conditional rendering -->
+    @if (user.age | gte:18) {
+      <adult-content></adult-content>
+    }
+    
+    <!-- List rendering with transformations -->
+    @for (item of items | filter:'active':true | sortBy:'name'; track item.id) {
+      <item-card [data]="item"></item-card>
+    }
+    
+    <!-- Switch statements -->
+    @switch (user.role | lowerCase) {
+      @case ('admin') { <admin-panel></admin-panel> }
+      @case ('user') { <user-dashboard></user-dashboard> }
+      @default { <guest-view></guest-view> }
+    }
+  `
+})
 ```
 
-These targets are either [inferred automatically](https://nx.dev/concepts/inferred-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) or defined in the `project.json` or `package.json` files.
+### With Reactive Forms
 
-[More about running tasks in the docs &raquo;](https://nx.dev/features/run-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-## Add new projects
-
-While you could add new projects to your workspace manually, you might want to leverage [Nx plugins](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) and their [code generation](https://nx.dev/features/generate-code?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) feature.
-
-Use the plugin's generator to create new projects.
-
-To generate a new application, use:
-
-```sh
-npx nx g @nx/angular:app demo
+```typescript
+@Component({
+  template: `
+    <form [formGroup]="form">
+      <input 
+        formControlName="email"
+        [class.invalid]="form.get('email')?.errors | isTruthy"
+      >
+      
+      @if (form.get('email')?.value | match:'@company.com') {
+        <span class="corporate-badge">Corporate Account</span>
+      }
+    </form>
+  `
+})
 ```
 
-To generate a new library, use:
+### Chaining Pipes
 
-```sh
-npx nx g @nx/angular:lib mylib
+```typescript
+@Component({
+  template: `
+    <!-- Complex data transformations -->
+    @for (
+      item of users 
+        | filter:'active':true 
+        | sortBy:'lastLogin' 
+        | take:10 
+        | map:'displayName';
+      track item
+    ) {
+      <user-item>{{ item }}</user-item>
+    }
+  `
+})
 ```
 
-You can use `npx nx list` to get a list of installed plugins. Then, run `npx nx list <plugin-name>` to learn about more specific capabilities of a particular plugin. Alternatively, [install Nx Console](https://nx.dev/getting-started/editor-setup?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) to browse plugins and generators in your IDE.
+## 🔧 Development
 
-[Learn more about Nx plugins &raquo;](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) | [Browse the plugin registry &raquo;](https://nx.dev/plugin-registry?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+This project uses Nx for monorepo management.
 
-## Set up CI!
+```bash
+# Build the library
+nx build ngx-pure-pipes
 
-### Step 1
+# Run tests
+nx test ngx-pure-pipes
 
-To connect to Nx Cloud, run the following command:
+# Run tests in watch mode
+nx test ngx-pure-pipes --watch
 
-```sh
-npx nx connect
+# Lint the code
+nx lint ngx-pure-pipes
+
+# Generate documentation
+nx build docs
 ```
 
-Connecting to Nx Cloud ensures a [fast and scalable CI](https://nx.dev/ci/intro/why-nx-cloud?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) pipeline. It includes features such as:
+## 📖 API Documentation
 
-- [Remote caching](https://nx.dev/ci/features/remote-cache?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Task distribution across multiple machines](https://nx.dev/ci/features/distribute-task-execution?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Automated e2e test splitting](https://nx.dev/ci/features/split-e2e-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Task flakiness detection and rerunning](https://nx.dev/ci/features/flaky-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+For detailed API documentation with examples, visit our [documentation site](link-to-docs).
 
-### Step 2
+## 🤝 Contributing
 
-Use the following command to configure a CI workflow for your workspace:
+We welcome contributions! Please see our [Contributing Guidelines](CONTRIBUTING.md) for details.
 
-```sh
-npx nx g ci-workflow
-```
+### Development Guidelines
 
-[Learn more about Nx on CI](https://nx.dev/ci/intro/ci-with-nx#ready-get-started-with-your-provider?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+- All pipes must be pure and standalone
+- Maintain strict TypeScript typing
+- Include comprehensive unit tests
+- Follow Angular coding standards
+- Update documentation for new features
 
-## Install Nx Console
+## 📋 Requirements
 
-Nx Console is an editor extension that enriches your developer experience. It lets you run tasks, generate code, and improves code autocompletion in your IDE. It is available for VSCode and IntelliJ.
+- Angular 20.1.0 or higher
+- TypeScript 5.0 or higher
+- RxJS 7.0 or higher (for async operations)
 
-[Install Nx Console &raquo;](https://nx.dev/getting-started/editor-setup?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+## 🗺️ Roadmap
 
-## Useful links
+- **v0.1**: Core boolean and comparison pipes
+- **v0.2**: Array and string manipulation pipes  
+- **v0.3**: Mathematical and aggregate operations
+- **v0.4**: Object manipulation utilities
+- **v1.0**: Stable API with full documentation
 
-Learn more:
+## 📄 License
 
-- [Learn more about this workspace setup](https://nx.dev/getting-started/tutorials/angular-monorepo-tutorial?utm_source=nx_project&amp;utm_medium=readme&amp;utm_campaign=nx_projects)
-- [Learn about Nx on CI](https://nx.dev/ci/intro/ci-with-nx?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Releasing Packages with Nx release](https://nx.dev/features/manage-releases?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [What are Nx plugins?](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-And join the Nx community:
-- [Discord](https://go.nx.dev/community)
-- [Follow us on X](https://twitter.com/nxdevtools) or [LinkedIn](https://www.linkedin.com/company/nrwl)
-- [Our Youtube channel](https://www.youtube.com/@nxdevtools)
-- [Our blog](https://nx.dev/blog?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+## 🙏 Acknowledgments
+
+- Inspired by functional programming libraries like Lodash and Ramda
+- Built with Angular's modern standalone architecture
+- Designed for optimal performance with Angular's change detection
+
+---
+
+**Made with ❤️ for the Angular community**
