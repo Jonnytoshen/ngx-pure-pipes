@@ -1,6 +1,23 @@
 {
   "name": "ngx-pure-pipes",
   "version": "0.0.1",
+  "license": "MIT",
+  "description": "A comprehensive collection of pure, standalone Angular pipes that bring operator-style functionality to your templates.",
+  "keywords": [
+    "angular",
+    "pipes",
+    "standalone",
+    "utils",
+    "ngx-pure-pipes"
+  ],
+  "homepage": "https://github.com/Jonnytoshen/ngx-pure-pipes",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Jonnytoshen/ngx-pure-pipes.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Jonnytoshen/ngx-pure-pipes/issues"
+  },
   "peerDependencies": {
     "@angular/common": "^20.1.0",
     "@angular/core": "^20.1.0"
