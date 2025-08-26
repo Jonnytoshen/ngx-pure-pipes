@@ -43,7 +43,7 @@ We welcome the following types of contributions:
 
 1. **Fork and clone the repository**
    ```bash
-   git clone https://github.com/your-username/ngx-pure-pipes.git
+   git clone https://github.com/Jonnytoshen/ngx-pure-pipes.git
    cd ngx-pure-pipes
    ```
 
@@ -78,16 +78,15 @@ ngx-pure-pipes/
 ├── libs/
 │   └── ngx-pure-pipes/
 │       ├── src/
-│       │   ├── lib/
-│       │   │   ├── array/          # Array operation pipes
-│       │   │   ├── boolean/        # Boolean logic pipes
-│       │   │   ├── comparison/     # Comparison operation pipes
-│       │   │   ├── math/           # Mathematical operation pipes
-│       │   │   ├── number/         # Number operation pipes
-│       │   │   ├── object/         # Object manipulation pipes
-│       │   │   ├── string/         # String operation pipes
-│       │   │   ├── utility/        # Utility pipes
-│       │   │   └── aggregate/      # Aggregate operation pipes
+│       │   ├── array/          # Array operation pipes
+│       │   ├── boolean/        # Boolean logic pipes
+│       │   ├── comparison/     # Comparison operation pipes
+│       │   ├── math/           # Mathematical operation pipes
+│       │   ├── number/         # Number operation pipes
+│       │   ├── object/         # Object manipulation pipes
+│       │   ├── string/         # String operation pipes
+│       │   ├── utility/        # Utility pipes
+│       │   ├── aggregate/      # Aggregate operation pipes
 │       │   ├── index.ts            # Public API exports
 │       │   └── test-setup.ts
 │       ├── ng-package.json
@@ -425,9 +424,8 @@ Releases are managed by the maintainers and follow semantic versioning:
 
 If you need help or have questions:
 
-1. Check existing [issues](link-to-issues) and [discussions](link-to-discussions)
+1. Check existing [issues](https://github.com/Jonnytoshen/ngx-pure-pipes/issues) and [discussions](https://github.com/Jonnytoshen/ngx-pure-pipes/discussions)
 2. Create a new issue with detailed information
-3. Join our [Discord/Slack community](link-to-community)
 
 ## 🙏 Recognition
 
