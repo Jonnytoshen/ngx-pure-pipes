@@ -69,11 +69,11 @@
       "commitMessage": "chore(release): release v{version}",
       "commit": true,
       "tag": true,
-      "push": true
+      "push": false
     },
     "changelog": {
       "workspaceChangelog": {
-        "createRelease": "github"
+        "createRelease": false
       }
     },
     "version": {
