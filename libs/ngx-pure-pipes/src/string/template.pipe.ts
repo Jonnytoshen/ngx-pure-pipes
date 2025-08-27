@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { isNil, isRegExp } from '../utils/check';
+import { isNil, isRegExp } from '../helpers/helpers';
 
 /**
  * Template string interpolation pipe

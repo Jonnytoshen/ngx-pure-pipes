@@ -8,7 +8,7 @@
  * @since 1.0.0
  */
 
-import { isNil, isRegExp } from './check';
+import { isNil, isRegExp } from './helpers';
 
 describe('check utilities', () => {
   describe('isNil', () => {
