@@ -19,7 +19,6 @@
     "url": "https://github.com/Jonnytoshen/ngx-pure-pipes/issues"
   },
   "peerDependencies": {
-    "@angular/common": "^20.1.0",
     "@angular/core": "^20.1.0"
   },
   "sideEffects": false
