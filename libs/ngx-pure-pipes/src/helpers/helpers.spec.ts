@@ -8,7 +8,7 @@
  * @since 1.0.0
  */
 
-import { isNil, isRegExp, round } from './helpers';
+import { isNil, isRegExp, round, isNumber } from './helpers';
 
 describe('check utilities', () => {
   describe('isNil', () => {
@@ -531,6 +531,343 @@ describe('check utilities', () => {
         const bezierValue = (1 - t) * (1 - t) * p0 + 2 * (1 - t) * t * p1 + t * t * p2;
         
         expect(round(bezierValue, 1)).toBe(30.0);
+      });
+    });
+  });
+
+  describe('isNumber', () => {
+    describe('should return true for valid numbers', () => {
+      it('should return true for positive integers', () => {
+        expect(isNumber(1)).toBe(true);
+        expect(isNumber(42)).toBe(true);
+        expect(isNumber(1000)).toBe(true);
+        expect(isNumber(999999)).toBe(true);
+      });
+
+      it('should return true for negative integers', () => {
+        expect(isNumber(-1)).toBe(true);
+        expect(isNumber(-42)).toBe(true);
+        expect(isNumber(-1000)).toBe(true);
+        expect(isNumber(-999999)).toBe(true);
+      });
+
+      it('should return true for zero', () => {
+        expect(isNumber(0)).toBe(true);
+        expect(isNumber(-0)).toBe(true);
+        expect(isNumber(+0)).toBe(true);
+      });
+
+      it('should return true for decimal numbers', () => {
+        expect(isNumber(3.14)).toBe(true);
+        expect(isNumber(-2.71)).toBe(true);
+        expect(isNumber(0.5)).toBe(true);
+        expect(isNumber(1.23456789)).toBe(true);
+      });
+
+      it('should return true for very small decimal numbers', () => {
+        expect(isNumber(0.000001)).toBe(true);
+        expect(isNumber(-0.000001)).toBe(true);
+        expect(isNumber(Number.MIN_VALUE)).toBe(true);
+        expect(isNumber(Number.EPSILON)).toBe(true);
+      });
+
+      it('should return true for very large numbers', () => {
+        expect(isNumber(Number.MAX_VALUE)).toBe(true);
+        expect(isNumber(Number.MAX_SAFE_INTEGER)).toBe(true);
+        expect(isNumber(Number.MIN_SAFE_INTEGER)).toBe(true);
+        expect(isNumber(1e20)).toBe(true);
+      });
+
+      it('should return true for scientific notation', () => {
+        expect(isNumber(1e10)).toBe(true);
+        expect(isNumber(1e-10)).toBe(true);
+        expect(isNumber(2.5e5)).toBe(true);
+        expect(isNumber(-3.7e-8)).toBe(true);
+      });
+
+      it('should return true for Infinity values', () => {
+        expect(isNumber(Infinity)).toBe(true);
+        expect(isNumber(-Infinity)).toBe(true);
+        expect(isNumber(Number.POSITIVE_INFINITY)).toBe(true);
+        expect(isNumber(Number.NEGATIVE_INFINITY)).toBe(true);
+      });
+
+      it('should return true for numbers created with Number constructor', () => {
+        expect(isNumber(Number(42))).toBe(true);
+        expect(isNumber(Number('3.14'))).toBe(true);
+        expect(isNumber(Number(true))).toBe(true); // Number(true) = 1
+        expect(isNumber(Number(false))).toBe(true); // Number(false) = 0
+      });
+
+      it('should return true for mathematical operation results', () => {
+        expect(isNumber(2 + 3)).toBe(true);
+        expect(isNumber(10 / 2)).toBe(true);
+        expect(isNumber(Math.PI)).toBe(true);
+        expect(isNumber(Math.E)).toBe(true);
+        expect(isNumber(Math.sqrt(16))).toBe(true);
+      });
+    });
+
+    describe('should return false for NaN', () => {
+      it('should return false for NaN literal', () => {
+        expect(isNumber(NaN)).toBe(false);
+        expect(isNumber(Number.NaN)).toBe(false);
+      });
+
+      it('should return false for operations resulting in NaN', () => {
+        expect(isNumber(0 / 0)).toBe(false);
+        expect(isNumber(Infinity - Infinity)).toBe(false);
+        expect(isNumber(Math.sqrt(-1))).toBe(false);
+        expect(isNumber(parseInt('abc'))).toBe(false);
+        expect(isNumber(parseFloat('not-a-number'))).toBe(false);
+      });
+
+      it('should return false for Number constructor with invalid input', () => {
+        expect(isNumber(Number('abc'))).toBe(false);
+        expect(isNumber(Number(undefined))).toBe(false);
+        expect(isNumber(Number({}))).toBe(false);
+      });
+    });
+
+    describe('should return false for non-number types', () => {
+      it('should return false for strings', () => {
+        expect(isNumber('42')).toBe(false);
+        expect(isNumber('3.14')).toBe(false);
+        expect(isNumber('hello')).toBe(false);
+        expect(isNumber('')).toBe(false);
+        expect(isNumber('0')).toBe(false);
+        expect(isNumber('NaN')).toBe(false);
+        expect(isNumber('Infinity')).toBe(false);
+      });
+
+      it('should return false for booleans', () => {
+        expect(isNumber(true)).toBe(false);
+        expect(isNumber(false)).toBe(false);
+      });
+
+      it('should return false for null and undefined', () => {
+        expect(isNumber(null)).toBe(false);
+        expect(isNumber(undefined)).toBe(false);
+      });
+
+      it('should return false for objects', () => {
+        expect(isNumber({})).toBe(false);
+        expect(isNumber({ value: 42 })).toBe(false);
+        expect(isNumber(new Object())).toBe(false);
+        expect(isNumber(new Date())).toBe(false);
+      });
+
+      it('should return false for arrays', () => {
+        expect(isNumber([])).toBe(false);
+        expect(isNumber([1, 2, 3])).toBe(false);
+        expect(isNumber([42])).toBe(false);
+      });
+
+      it('should return false for functions', () => {
+        expect(isNumber(() => 42)).toBe(false);
+        expect(isNumber(function() { return 42; })).toBe(false);
+        expect(isNumber(Math.max)).toBe(false);
+        expect(isNumber(Number)).toBe(false);
+      });
+
+      it('should return false for symbols', () => {
+        expect(isNumber(Symbol('test'))).toBe(false);
+        expect(isNumber(Symbol.iterator)).toBe(false);
+      });
+
+      it('should return false for BigInt', () => {
+        expect(isNumber(BigInt(42))).toBe(false);
+      });
+
+      it('should return false for regex', () => {
+        expect(isNumber(/\d+/)).toBe(false);
+        expect(isNumber(new RegExp('\\d+'))).toBe(false);
+      });
+
+      it('should return false for Map and Set', () => {
+        expect(isNumber(new Map())).toBe(false);
+        expect(isNumber(new Set())).toBe(false);
+        expect(isNumber(new WeakMap())).toBe(false);
+        expect(isNumber(new WeakSet())).toBe(false);
+      });
+    });
+
+    describe('type guard functionality', () => {
+      it('should work as a type guard in TypeScript', () => {
+        const mixedValues: unknown[] = [42, '42', null, 3.14, NaN, true, {}, []];
+        
+        const numbers = mixedValues.filter(isNumber);
+        
+        // TypeScript should infer numbers as number[]
+        expect(numbers).toEqual([42, 3.14]);
+        expect(numbers.every(n => typeof n === 'number' && !Number.isNaN(n))).toBe(true);
+      });
+
+      it('should enable type-safe operations after validation', () => {
+        const testValue: unknown = 42;
+        
+        if (isNumber(testValue)) {
+          // TypeScript should know testValue is number here
+          const doubled = testValue * 2;
+          const fixed = testValue.toFixed(2);
+          
+          expect(doubled).toBe(84);
+          expect(fixed).toBe('42.00');
+        } else {
+          fail('Expected testValue to be a number');
+        }
+      });
+
+      it('should work with conditional logic', () => {
+        const processValue = (value: unknown): string => {
+          return isNumber(value) ? value.toString() : 'not a number';
+        };
+
+        expect(processValue(42)).toBe('42');
+        expect(processValue(3.14)).toBe('3.14');
+        expect(processValue('42')).toBe('not a number');
+        expect(processValue(NaN)).toBe('not a number');
+        expect(processValue(null)).toBe('not a number');
+      });
+    });
+
+    describe('edge cases and special scenarios', () => {
+      it('should handle boxed numbers correctly', () => {
+        // Note: boxed numbers (new Number()) are objects, not primitives
+        expect(isNumber(new Number(42))).toBe(false);
+        expect(isNumber(new Number(3.14))).toBe(false);
+        expect(isNumber(new Number(NaN))).toBe(false);
+      });
+
+      it('should handle numeric strings consistently', () => {
+        expect(isNumber('42')).toBe(false);
+        expect(isNumber('3.14')).toBe(false);
+        expect(isNumber('0')).toBe(false);
+        expect(isNumber('-42')).toBe(false);
+        expect(isNumber('1e10')).toBe(false);
+      });
+
+      it('should handle coercion scenarios', () => {
+        // Values that could be coerced to numbers but aren't numbers
+        expect(isNumber('')).toBe(false); // Number('') = 0
+        expect(isNumber('   ')).toBe(false); // Number('   ') = 0
+        expect(isNumber(true)).toBe(false); // Number(true) = 1
+        expect(isNumber(false)).toBe(false); // Number(false) = 0
+        expect(isNumber([])).toBe(false); // Number([]) = 0
+      });
+
+      it('should handle prototype pollution scenarios', () => {
+        const obj = Object.create(null);
+        obj.valueOf = () => 42;
+        obj.toString = () => '42';
+        
+        expect(isNumber(obj)).toBe(false);
+      });
+    });
+
+    describe('performance considerations', () => {
+      it('should handle large datasets efficiently', () => {
+        const mixedArray = Array.from({ length: 10000 }, (_, i) => {
+          if (i % 4 === 0) return i;
+          if (i % 4 === 1) return `${i}`;
+          if (i % 4 === 2) return null;
+          return { value: i };
+        });
+
+        const start = performance.now();
+        const numbers = mixedArray.filter(isNumber);
+        const end = performance.now();
+
+        expect(numbers.length).toBe(2500); // 1/4 of the array
+        expect(end - start).toBeLessThan(50); // Should complete in less than 50ms
+        expect(numbers.every(n => typeof n === 'number' && !Number.isNaN(n))).toBe(true);
+      });
+
+      it('should maintain consistent performance across different types', () => {
+        const testValues = [
+          42, '42', true, null, undefined, {}, [], NaN, Infinity,
+          Symbol('test'), /regex/, new Date(), Math.max, new Map()
+        ];
+
+        const start = performance.now();
+        for (let i = 0; i < 1000; i++) {
+          testValues.forEach(isNumber);
+        }
+        const end = performance.now();
+
+        expect(end - start).toBeLessThan(100); // Should complete efficiently
+      });
+    });
+
+    describe('real-world use cases', () => {
+      it('should validate form input values', () => {
+        const formInputs = ['42', '3.14', 'abc', '', null, undefined, 42];
+        
+        const validNumbers = formInputs
+          .map(input => typeof input === 'string' ? parseFloat(input) : input)
+          .filter(isNumber);
+        
+        expect(validNumbers).toEqual([42, 3.14, 42]);
+      });
+
+      it('should filter arrays for mathematical operations', () => {
+        const mixedData = [1, '2', 3, null, 4.5, 'hello', 6, undefined, NaN];
+        
+        const numbers = mixedData.filter(isNumber);
+        const sum = numbers.reduce((acc, num) => acc + num, 0);
+        
+        expect(numbers).toEqual([1, 3, 4.5, 6]);
+        expect(sum).toBe(14.5);
+      });
+
+      it('should validate API response data', () => {
+        const apiResponse = {
+          id: 123,
+          name: 'Product',
+          price: '29.99', // String from API
+          rating: 4.5,
+          reviews: null,
+          discount: undefined
+        };
+
+        const numericFields = Object.values(apiResponse).filter(isNumber);
+        
+        expect(numericFields).toEqual([123, 4.5]);
+      });
+
+      it('should work in pipe implementations', () => {
+        // Simulating a pipe that only processes numbers
+        const pipeTransform = (value: unknown, multiplier: unknown): number | null => {
+          if (!isNumber(value) || !isNumber(multiplier)) {
+            return null;
+          }
+          return value * multiplier;
+        };
+
+        expect(pipeTransform(5, 2)).toBe(10);
+        expect(pipeTransform('5', 2)).toBeNull();
+        expect(pipeTransform(5, '2')).toBeNull();
+        expect(pipeTransform(NaN, 2)).toBeNull();
+      });
+
+      it('should validate calculation inputs', () => {
+        const calculateTotal = (values: unknown[]): number => {
+          const validNumbers = values.filter(isNumber);
+          return validNumbers.reduce((sum, num) => sum + num, 0);
+        };
+
+        const inputs = [10, '20', 30, null, 40.5, NaN, 'hello'];
+        expect(calculateTotal(inputs)).toBe(80.5);
+      });
+
+      it('should handle statistical data processing', () => {
+        const dataset = [1.2, 2.3, 'invalid', 3.4, null, 4.5, NaN, 5.6];
+        
+        const validData = dataset.filter(isNumber);
+        const mean = validData.reduce((sum, val) => sum + val, 0) / validData.length;
+        
+        expect(validData).toEqual([1.2, 2.3, 3.4, 4.5, 5.6]);
+        expect(mean).toBeCloseTo(3.4);
       });
     });
   });

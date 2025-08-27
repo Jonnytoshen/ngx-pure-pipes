@@ -111,3 +111,59 @@ export function round(value: number, precision = 0): number {
   // Handle negative zero case
   return result === 0 ? 0 : result;
 }
+
+/**
+ * Checks if a value is a valid number (excluding NaN)
+ *
+ * This function provides a reliable way to determine if a value is a valid number
+ * that can be used in mathematical operations. It performs both type checking
+ * and NaN validation in a single operation, which is more robust than using
+ * typeof alone since NaN has typeof 'number' but is not a usable numeric value.
+ *
+ * The function uses TypeScript type guards to provide compile-time type safety,
+ * allowing TypeScript to narrow the type automatically after the check.
+ *
+ * @example
+ * ```typescript
+ * // Basic number validation
+ * if (isNumber(value)) {
+ *   // TypeScript knows value is number here
+ *   const result = value * 2;
+ * }
+ *
+ * // Input validation in pipes
+ * if (!isNumber(input)) {
+ *   return null; // Invalid input
+ * }
+ * return input.toFixed(2);
+ * 
+ * // Array filtering
+ * const validNumbers = mixedArray.filter(isNumber);
+ * // validNumbers is typed as number[]
+ * ```
+ *
+ * @example
+ * ```typescript
+ * // Returns true for valid numbers
+ * isNumber(42) // true
+ * isNumber(3.14) // true
+ * isNumber(-17) // true
+ * isNumber(0) // true
+ * isNumber(Infinity) // true
+ * isNumber(-Infinity) // true
+ *
+ * // Returns false for invalid values
+ * isNumber(NaN) // false
+ * isNumber('42') // false
+ * isNumber(null) // false
+ * isNumber(undefined) // false
+ * isNumber({}) // false
+ * isNumber([]) // false
+ * ```
+ *
+ * @param value - The value to check for valid number type
+ * @returns True if the value is a valid number (not NaN), false otherwise
+ */
+export function isNumber(value: unknown): value is number {
+  return typeof value === 'number' && !Number.isNaN(value);
+}
