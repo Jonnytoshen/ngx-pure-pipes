@@ -69,7 +69,7 @@
       "commitMessage": "chore(release): release v{version}",
       "commit": true,
       "tag": true,
-      "push": false
+      "push": true
     },
     "changelog": {
       "workspaceChangelog": {
