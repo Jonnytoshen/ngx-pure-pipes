@@ -7,5 +7,8 @@ export * from './aggregate/mean.pipe';
 export * from './aggregate/min.pipe';
 export * from './aggregate/sum.pipe';
 
+// Number Pipes
+export * from './number/round.pipe';
+
 // String Pipes
 export * from './string/template.pipe';
