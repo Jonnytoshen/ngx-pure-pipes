@@ -3,6 +3,7 @@
 // Aggregate Pipes
 export * from './aggregate/group-by.pipe';
 export * from './aggregate/max.pipe';
+export * from './aggregate/mean.pipe';
 export * from './aggregate/min.pipe';
 export * from './aggregate/sum.pipe';
 
